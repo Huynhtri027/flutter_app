@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "351718364207",
+    "firebase_url": "https://iresen-2d5d3.firebaseio.com",
+    "project_id": "iresen-2d5d3",
+    "storage_bucket": "iresen-2d5d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:351718364207:android:194933a73a7e49ba",
+        "android_client_info": {
+          "package_name": "com.imane.flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "351718364207-7atedvgsrof4utq60al37b5jos3mkoom.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDznhweCWaVjyMN7IN30SAVmpdgfTil_E8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "351718364207-7atedvgsrof4utq60al37b5jos3mkoom.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
