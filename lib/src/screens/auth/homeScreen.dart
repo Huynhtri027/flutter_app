@@ -24,21 +24,29 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   FirebaseUser user;
   @override
   void initState() {
     super.initState();
     initUser();
-   // getcurrentuser();
-
+//    getcurrentuser();
   }
-
+  String name,email;
   initUser() async {
-   user = await _auth.currentUser();
-    setState(() {});
-
-
+    user = await _auth.currentUser();
+    print(user.uid);
+    var res = await  Firestore.instance.collection('Users')..where("uid" , isEqualTo: user.uid).snapshots();
+    print("----");
+    res.snapshots().listen((data){
+      var dt = data.documents[0].data;
+      print(dt);
+      setState(() {
+        name = dt["name"];
+        email =dt["email"];
+        print(name);
+        print(email);
+      });
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -48,10 +56,15 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               AppBar(
                 automaticallyImplyLeading: false,
-                title: Text('My account'),
+                title: Text(""),
               ),
+           // Text(name.toString()),
+           // Text(email == null? "" : email),
+
 
               UserAccountsDrawerHeader(
+                accountName: Text(name.toString()),
+                accountEmail: Text(email.toString()),
 
               ),
 
@@ -65,7 +78,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               ListTile(
                 title: Text('Logout'),
-                onTap: () {},
+                onTap: () {
+
+                },
               )
             ],
           ),
@@ -76,16 +91,18 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Map()
     );
   }
-
-/*  Future<User> getcurrentuser() async {
+/*
+  Future<User> getcurrentuser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     DocumentSnapshot snap = await Firestore.instance.collection('users').document().get();
     setState(() {
       widget.user = new User.fromDocument(snap); });
     new User.fromDocument(snap);
     print(snap);
-  }*/
+  }
+  */
 }
+
 
 
 
@@ -381,6 +398,15 @@ locationController.text = placemark[0].name;
    var where  =destinationController.value;
     return firestore.collection('user destination').add({
       'destination':where.text,
+    });
+  }
+  Future<DocumentReference> _logout() async {
+    FirebaseAuth.instance.signOut().then((action) {
+      Navigator
+          .of(context)
+          .pushReplacementNamed('/toWelcome');
+    }).catchError((e) {
+      print(e);
     });
   }
 

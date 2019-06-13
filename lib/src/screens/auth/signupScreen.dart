@@ -26,10 +26,8 @@ class _SignupScreenState extends State<SignupScreen> {
   // By default it is false because we dont want to show loader, we want to show
   // only after user tap signup button.
   bool isLoading = false;
+
   // Lets create the variables to save the text field values
-  //String name;
-  //String email;
-  //String password;
   String name;
   String email;
   String password;
@@ -37,7 +35,7 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     Size mySize = MediaQuery.of(context).size;
-    // We need to do this inside build function because we need 'context',
+    // We need to do this inside build function becasue we need 'context',
 
     return Material(
       child: SafeArea(
@@ -206,12 +204,13 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
+
   void _signupUser() async {
     // Check if all the formms have valid inputs
     if (!_formKey.currentState.validate()) {
       return;
     }
-    // then we saved all the values to those variables-
+    // then we saved all the values to those variables
     _formKey.currentState.save();
     // and set the loading to true
     setState(() {
@@ -231,6 +230,7 @@ class _SignupScreenState extends State<SignupScreen> {
         // User is not null means we successfully registered the user to firebase
         user = user;
         uid = user.uid;
+
         //Getting the user token
         user.getIdToken().then((token) {
           // here after we fetch the user token, then we will upload the data to database
@@ -244,7 +244,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
             // First we created Firestore resference, its just a path where we want to put data
             DocumentReference documentReference =
-                Firestore.instance.document("Users/$uid");
+            Firestore.instance.document("Users/$uid");
             Map<String, String> userData = {
               'name': name,
               'email': email,
