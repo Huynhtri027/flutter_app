@@ -35,10 +35,10 @@ class _MyHomePageState extends State<MyHomePage> {
   initUser() async {
     user = await _auth.currentUser();
     print(user.uid);
-    var res = await  Firestore.instance.collection('Users')..where("uid" , isEqualTo: user.uid).snapshots();
+    var res = await  Firestore.instance.collection('Users').document(user.uid);
     print("----");
     res.snapshots().listen((data){
-      var dt = data.documents[0].data;
+      var dt = data.data;
       print(dt);
       setState(() {
         name = dt["name"];
@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
            // Text(name.toString()),
            // Text(email == null? "" : email),
+
 
 
               UserAccountsDrawerHeader(
