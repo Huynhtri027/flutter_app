@@ -4,6 +4,8 @@ import 'package:flutter_app/src/screens/auth/homeScreen.dart';
 import 'package:flutter_app/src/screens/auth/loginScreen.dart';
 import 'package:flutter_app/src/screens/auth/signupScreen.dart';
 import 'package:flutter_app/src/screens/auth/welcomeScreen.dart';
+import 'package:flutter_app/src/screens/auth/profileScreen.dart';
+
 import 'package:flutter_app/src/screens/splashScreen.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -49,6 +51,11 @@ class _AppState extends State<App> {
           case '/toHome':
             return PageTransition(
                 child: MyHomePage(), type: PageTransitionType.fade);
+            break;
+          
+          case '/toProfile':
+            return PageTransition(
+                child: MyProfilePage(), type: PageTransitionType.fade);
             break;
 
           default:

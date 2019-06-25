@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Model/Globals.dart' as globals;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -191,8 +192,11 @@ class _LoginScreenState extends State<LoginScreen> {
       if (user != null) {
         // User is not null means we successfully registered the user to firebase
         user = user;
-        uid = user.uid;
+        setState(() {
+          globals.uid = user.uid;
+        });
 
+        // you have to save that value in shared prefs if you need it to be saved in cache for more use,
         //Getting the user token
         user.getIdToken().then((token) {
           userToken = token;

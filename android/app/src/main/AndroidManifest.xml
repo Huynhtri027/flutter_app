@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Imanxi"
+        android:label="passenger"
         android:icon="@mipmap/ic_launcher">
 
         <!-- My api key -->

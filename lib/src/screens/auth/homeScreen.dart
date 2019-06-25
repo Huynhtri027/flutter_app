@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter_app/requests/google_maps_requests.dart';
+import 'package:flutter_app/src/screens/auth/signupScreen.dart';
 import 'package:flutter_app/utils/core.dart';
-//
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:geolocator/geolocator.dart';
 import 'dart:async';
-import 'package:flutter_app/src/screens/auth/signupScreen.dart';
 class MyHomePage extends StatefulWidget {
-
-
-  MyHomePage({Key key, this.title}) : super(key: key);
-
+  MyHomePage({Key key, this.title ,this.userToken,}) : super(key: key);
   final String title;
+  final String userToken;
+
 
  @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -23,6 +21,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseUser user;
   @override
@@ -31,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
     initUser();
 //    getcurrentuser();
   }
-  String name,email;
+  String name,email,token;
   initUser() async {
     user = await _auth.currentUser();
     print(user.uid);
@@ -43,8 +42,11 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         name = dt["name"];
         email =dt["email"];
+        token =dt["token"];
         print(name);
         print(email);
+        print(token);
+
       });
     });
   }
@@ -67,20 +69,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 accountName: Text(name.toString()),
                 accountEmail: Text(email.toString()),
 
+
               ),
 
               ListTile(
-                title: Text('Modify you informations'),
-                onTap: () {},
+                title: Text('profile'),
+                onTap: () {
+                  Navigator
+                        .of(context)
+                        .pushReplacementNamed('/toProfile');
+                },
               ),
               ListTile(
-                title: Text('Modify your password'),
+                title: Text('settings'),
                 onTap: () {},
               ),
               ListTile(
                 title: Text('Logout'),
                 onTap: () {
-
+                  FirebaseAuth.instance.signOut().then((action) {
+                    Navigator
+                        .of(context)
+                        .pushReplacementNamed('/toWelcome');
+                  });
                 },
               )
             ],
@@ -174,8 +185,11 @@ class _MapState extends State<Map> {
             child:
             RaisedButton(
               onPressed: () {
-                _makeRequest();
-                print('clicked');
+                //_makeRequest();
+
+                getUserDoc();
+
+                   print('clicked');
               },
 
               color: Colors.lightBlue,
@@ -385,12 +399,13 @@ locationController.text = placemark[0].name;
     createRoute(route);
 
   }
-
   Future<DocumentReference> _addGeoPoint() async {
+
     var pos = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     GeoFirePoint point = geo.point(latitude: pos.latitude, longitude: pos.longitude);
     return firestore.collection('locations').add({
       'position': point.data,
+
     });
   }
 
@@ -399,6 +414,8 @@ locationController.text = placemark[0].name;
    var where  =destinationController.value;
     return firestore.collection('user destination').add({
       'destination':where.text,
+
+
     });
   }
   Future<DocumentReference> _logout() async {
@@ -411,6 +428,22 @@ locationController.text = placemark[0].name;
     });
   }
 
+  Future<DocumentReference> getUserDoc() async {
+    //user location
+    var pos = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    GeoFirePoint point = geo.point(latitude: pos.latitude, longitude: pos.longitude);
+    //get current user id
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final Firestore _firestore = Firestore.instance;
+    FirebaseUser user = await _auth.currentUser();
+    DocumentReference ref = _firestore.collection('users').document(user.uid);
 
+    var userLocation = {
+      'position': point,
+      'id': ref,
+    };
+    return firestore.collection('locations').add(userLocation);
 
 }
+}
+
